@@ -36,11 +36,11 @@
 			};
 
 			var _listeners = {
-				basic : null,
-				hra : null,
-				da : null,
-				tax: null,
-				salary : null
+				basic : [],
+				hra : [],
+				da : [],
+				tax: [],
+				salary : []
 			};
 
 			this.get = function(attrName){
@@ -50,14 +50,19 @@
 			this.set = function(attrName, value){
 				if (_data[attrName] === value) return;
 				_data[attrName] = value;
+				triggerChange(attrName);				
+			}
 
-				var listenerFn = _listeners[attrName];
-				if (typeof listenerFn === 'function')
-					listenerFn();
+			function triggerChange(attrName){
+				var listenerFns = _listeners[attrName];
+				listenerFns.forEach(function(listenerFn){
+					if (typeof listenerFn === 'function')
+						listenerFn();	
+				});
 			}
 
 			this.subscribe = function(attrName, listenerFn){
-				_listeners[attrName] = listenerFn;
+				_listeners[attrName].push(listenerFn);
 			}
 		}
 		SalaryCalculatorModel.prototype.calculate = function() {

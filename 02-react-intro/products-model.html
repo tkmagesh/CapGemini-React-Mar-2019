@@ -29,6 +29,10 @@
 			getAll(){
 				return [...this.list];
 			}
+
+			getCount(){
+				return this.list.length;
+			}
 		}
 
 		class Products extends React.Component{
@@ -57,9 +61,21 @@
 			}
 		}
 
+		class ProductsCount extends React.Component{
+			render(){
+				return(
+					<div># of products : <span> {this.props.count} </span></div>
+				)
+			}
+		}
 		var productsCollection = new ProductsCollection();
 		function renderProducts(){
-			ReactDOM.render(<Products data={productsCollection}/>,
+			ReactDOM.render(
+				<div>
+					<ProductsCount count={productsCollection.getCount()}/>
+					<Products data={productsCollection}/>
+				</div>,
+
 				document.getElementById('root'));
 		}
 		renderProducts();

@@ -35,8 +35,20 @@
 				)
 			}
 		}
+	
+		class ProductsCount extends React.Component{
+			render(){
+				return(
+					<div># of products : <span> {this.props.count} </span></div>
+				)
+			}
+		}
 
-		ReactDOM.render(<Products />,
+		ReactDOM.render(
+			<div>
+				<ProductsCount />
+				<Products />
+			</div>,
 			document.getElementById('root'));
 	</script>
 </head>

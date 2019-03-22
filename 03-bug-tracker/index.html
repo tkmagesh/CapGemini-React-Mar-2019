@@ -64,14 +64,25 @@
 			}
 		}
 
+		class Bug{
+			name = '';
+			isClosed = false;
+
+			constructor(name){
+				this.name = name;
+			}
+
+			toggle(){
+				this.isClosed = !this.isClosed;
+				console.log(this);
+			}
+		}
+
 		class BugsCollection extends EventEmitter{
 			list = [];
 
 			addNew(bugName){
-				let newBug = {
-					name : bugName,
-					isClosed : false
-				};
+				let newBug = new Bug(bugName);
 				this.list.push(newBug);
 				this.triggerChange();
 			}
@@ -90,6 +101,25 @@
 				this.triggerChange();
 			}
 		}
+
+		class BugItem extends React.Component{
+			
+			onBugNameClick = () => {
+				this.props.bug.toggle();
+			}
+			render(){
+				let { bug } = this.props;
+				let bugStyle = 'bugname ' + (bug.isClosed ? 'closed' : '');
+				return(
+					<li>
+			 			<span className={bugStyle} onClick={() => this.onBugNameClick()}>
+			 				{bug.name}
+			 			</span>
+			 			<div className="datetime">[Created At]</div>
+			 		</li>
+				)
+			}
+		}
 		class BugTracker extends React.Component{
 			state = {
 				newBugName : ''
@@ -98,28 +128,17 @@
 			onAddNewClick = () => {
 				this.props.model.addNew(this.state.newBugName);
 			}
-			onBugNameClick = (bug) => {
-				this.props.model.toggle(bug);
-			}
+			
 			render(){
 				let { model } = this.props,
 					bugs = model.getAll(),
-					bugItems = bugs.map((bug, index) => {
-						let bugStyle = 'bugname ' + (bug.isClosed ? 'closed' : '');
-						return (
-							<li key={index}>
-					 			<span className={bugStyle} onClick={() => this.onBugNameClick(bug)}>
-					 				{bug.name}
-					 			</span>
-					 			<div className="datetime">[Created At]</div>
-					 		</li>
-						);
-					});
-				return(
+					bugItems = bugs.map((bug, index) => (<BugItem bug={bug} key={index} />)),
+					closedCount = bugs.reduce((result, bug) => bug.isClosed ? ++result : result, 0);
 
+				return(
 					<React.Fragment>
 						<section className="stats">
-						 	<span className="closed"> 1 </span>
+						 	<span className="closed">{closedCount}</span>
 						 	<span> / </span>
 						 	<span>{bugs.length}</span>
 						 </section>

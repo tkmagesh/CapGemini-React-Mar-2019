@@ -1,7 +1,8 @@
 var SM = (function(){
 	var _currentState = undefined,
 		_reducer = null,
-		_listeners = [];
+		_listeners = [],
+		_init_action = '@@INIT';
 
 
 	function getState(){
@@ -26,7 +27,7 @@ var SM = (function(){
 	function createStore(reducer){
 		//validate reducer
 		_reducer = reducer;
-
+		_currentState = reducer(_currentState, _init_action);
 		return {
 			getState, subscribe, dispatch
 		};

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Spinner</title>
+	<script src="react.development.js"></script>
+	<script src="react-dom.development.js"></script>
+	<script src="babel.min.js"></script>
+	<script src="state-manager.js"></script>
+	<script type="text/babel">		
+
+		function spinnerReducer(currentState = 0, action){
+			if (action.type === 'UP') return ++currentState;
+			if (action.type === 'DOWN') return --currentState;
+			if (action.type === 'DOUBLE_UP') return currentState * 2;
+			if (action.type === 'DOUBLE_DOWN') return currentState / 2;
+			return currentState;
+		}
+		
+		var store = SM.createStore(spinnerReducer);
+
+		var spinnerActionCreators = {
+			up(){
+				let action = { type : 'UP' };	
+				return action;
+			},
+			down(){
+				let action = { type : 'DOWN' };	
+				return action;
+			},
+			doubleUp(){
+				let action = { type : 'DOUBLE_UP' };	
+				return action;	
+			},
+			doubleDown(){
+				let action = { type : 'DOUBLE_DOWN' };	
+				return action;
+			}
+		}
+
+		function bindActionCreators(actionCreators, dispatch){
+			var actionDispatchers = {};
+			for(let key in actionCreators){
+				actionDispatchers[key] = function(){
+					let action = actionCreators[key].apply(undefined, arguments);
+					dispatch(action);
+				}
+			}
+			return actionDispatchers;
+		}
+
+		
+		{/*let Spinner = (props) => {
+			let { spinnerValue, up, down } = props;
+			return(
+				<div>
+					<input type="button" value="DOWN" onClick={down} />
+					<span> [ {spinnerValue} ] </span>
+					<input type="button" value="UP" onClick={up} />
+				</div>
+			)
+		};*/}
+
+		{/*let Spinner = ({ spinnerValue, up, down }) => {
+			return(
+				<div>
+					<input type="button" value="DOWN" onClick={down} />
+					<span> [ {spinnerValue} ] </span>
+					<input type="button" value="UP" onClick={up} />
+				</div>
+			)
+		};*/}
+
+		let Spinner = ({ spinnerValue, up, down, doubleUp, doubleDown }) => (
+			<div>
+				<input type="button" value="DOUBLE DOWN" onClick={doubleDown} />
+				<input type="button" value="DOWN" onClick={down} />
+				<span> [ {spinnerValue} ] </span>
+				<input type="button" value="UP" onClick={up} />
+				<input type="button" value="DOUBLE UP" onClick={doubleUp} />
+			</div>
+		);
+		
+		
+
+		let actionDispatchers = bindActionCreators(spinnerActionCreators, store.dispatch);
+		function renderSpinner(){
+			let spinnerValue = store.getState();
+			ReactDOM.render(<Spinner spinnerValue={spinnerValue} {...actionDispatchers} />,
+				document.getElementById('root'));
+		}
+		renderSpinner();
+		store.subscribe(renderSpinner);
+	</script>
+</head>
+<body>
+	<div id="root"></div>
+</body>
+</html>

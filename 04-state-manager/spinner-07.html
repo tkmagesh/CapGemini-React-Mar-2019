@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Spinner</title>
+	<script src="react.development.js"></script>
+	<script src="react-dom.development.js"></script>
+	<script src="babel.min.js"></script>
+	<script src="state-manager.js"></script>
+	<script type="text/babel">		
+
+		function spinnerReducer(currentState = 0, action){
+			if (action.type === 'UP') return ++currentState;
+			if (action.type === 'DOWN') return --currentState;	
+			return currentState;
+		}
+		
+		var store = SM.createStore(spinnerReducer);
+
+		var spinnerActionCreators = {
+			up(){
+				let action = { type : 'UP' };	
+				return action;
+			},
+			down(){
+				let action = { type : 'DOWN' };	
+				return action;
+			}
+		}
+
+		function bindSpinnerActionCreators(spinnerActionCreators, dispatch){
+			var actionDispatchers = {
+				up(){
+					let action = spinnerActionCreators.up();	
+					dispatch(action);
+				},
+				down(){
+					let action = spinnerActionCreators.down();	
+					dispatch(action);
+				}
+			};
+			return actionDispatchers;
+		}
+
+		
+		{/*let Spinner = (props) => {
+			let { spinnerValue, up, down } = props;
+			return(
+				<div>
+					<input type="button" value="DOWN" onClick={down} />
+					<span> [ {spinnerValue} ] </span>
+					<input type="button" value="UP" onClick={up} />
+				</div>
+			)
+		};*/}
+
+		{/*let Spinner = ({ spinnerValue, up, down }) => {
+			return(
+				<div>
+					<input type="button" value="DOWN" onClick={down} />
+					<span> [ {spinnerValue} ] </span>
+					<input type="button" value="UP" onClick={up} />
+				</div>
+			)
+		};*/}
+
+		let Spinner = ({ spinnerValue, up, down }) => (
+			<div>
+				<input type="button" value="DOWN" onClick={down} />
+				<span> [ {spinnerValue} ] </span>
+				<input type="button" value="UP" onClick={up} />
+			</div>
+		);
+		
+		
+
+		let actionDispatchers = bindSpinnerActionCreators(spinnerActionCreators, store.dispatch);
+		function renderSpinner(){
+			let spinnerValue = store.getState();
+			ReactDOM.render(<Spinner spinnerValue={spinnerValue} {...actionDispatchers} />,
+				document.getElementById('root'));
+		}
+		renderSpinner();
+		store.subscribe(renderSpinner);
+	</script>
+</head>
+<body>
+	<div id="root"></div>
+</body>
+</html>

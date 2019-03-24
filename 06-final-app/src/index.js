@@ -11,6 +11,9 @@ import './index.css';
 
 import * as serviceWorker from './serviceWorker';
 
+import axios from 'axios';
+
+window['axios'] = axios;
 
 ReactDOM.render(
 	<Provider store={appStore}>

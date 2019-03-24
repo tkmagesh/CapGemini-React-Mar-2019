@@ -11,9 +11,12 @@ import bugActionCreators from './actions';
 
 class BugTracker extends React.Component{
 	render(){
-		let { bugs, toggle, addNew, removeClosed } = this.props;
+		let { bugs, toggle, addNew, removeClosed, load } = this.props;
 		return(
 			<React.Fragment>
+
+				<input type="button" value="Load" onClick={load} />
+				
 				{/* BugStats */}
 				<BugStats bugs={bugs} />
 

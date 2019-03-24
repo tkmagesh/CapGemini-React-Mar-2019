@@ -11,14 +11,15 @@ import BugList from './views/bugList';
 import bugActionCreators from './actions';
 
 class BugTracker extends React.Component{
+	componentDidMount(){
+		this.props.load();
+	}
 	render(){
 		let { bugs, toggle, addNew, removeClosed, load } = this.props;
 		return(
 			<React.Fragment>
 				
-				
-
-				<input type="button" value="Load" onClick={load} />
+				{/*<input type="button" value="Load" onClick={load} />*/}
 				
 				{/* BugStats */}
 				<BugStats bugs={bugs} />
@@ -37,7 +38,7 @@ class BugTracker extends React.Component{
 }
 
 function mapStateToBugTrackerProps(storeState){
-	let bugs = storeState.bugState;
+	let bugs = storeState.bugState.filter(bug => bug.id % 2 === storeState.spinnerState % 2);
 	return { bugs : bugs };
 }
 

@@ -7,6 +7,7 @@ import BugSort from './views/bugSort';
 import BugEdit from './views/bugEdit';
 import BugList from './views/bugList';
 
+
 import bugActionCreators from './actions';
 
 class BugTracker extends React.Component{
@@ -14,6 +15,8 @@ class BugTracker extends React.Component{
 		let { bugs, toggle, addNew, removeClosed, load } = this.props;
 		return(
 			<React.Fragment>
+				
+				
 
 				<input type="button" value="Load" onClick={load} />
 				

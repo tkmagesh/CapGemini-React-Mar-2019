@@ -11,15 +11,14 @@ import './index.css';
 
 import * as serviceWorker from './serviceWorker';
 
-import axios from 'axios';
-
-window['axios'] = axios;
+import AsyncStatus from './bugTracker/views/AsyncStatus';
 
 ReactDOM.render(
 	<Provider store={appStore}>
 		<div>
 			<Spinner />
 			<hr/>
+			<AsyncStatus />
 			<BugTracker />
 		</div>
 	</Provider>
